@@ -57,7 +57,7 @@ async function pixabayApi(input, page) {
   };
 
   try {
-    const response = await axios.get(BASE_URL, options).then((page += 1));
+    const response = await axios.get(BASE_URL, options);
     createMarkup(response.data);
     showBtn();
     return response.data;
@@ -69,7 +69,7 @@ async function pixabayApi(input, page) {
 async function onLoadMoreBtnClick() {
   page += 1;
   try {
-    const result = await pixabayApi(input.value, page).then(data => data);
+    const result = await pixabayApi(input.value, page);
     const totalPages = page * perPage;
     console.log(result);
     if (result.totalHits <= totalPages) {
