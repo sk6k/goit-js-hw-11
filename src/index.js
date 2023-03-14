@@ -22,12 +22,16 @@ async function onSearch(evt) {
     try {
       page = 1;
       clear();
-      const result = await pixabayApi(input.value, page);
-      if (result.hits < 1) {
+      const response = await pixabayApi(input.value, page);
+      console.log(response);
+      if (response.hits < 1) {
         hideBtn();
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
+      } else {
+        createMarkup(response);
+        showBtn();
       }
     } catch (e) {
       console.log(e);
@@ -41,7 +45,7 @@ async function onSearch(evt) {
   }
 }
 
-async function pixabayApi(input, page) {
+async function pixabayApi(input) {
   const BASE_URL = 'https://pixabay.com/api';
 
   const options = {
@@ -58,8 +62,6 @@ async function pixabayApi(input, page) {
 
   try {
     const response = await axios.get(BASE_URL, options);
-    createMarkup(response.data);
-    showBtn();
     return response.data;
   } catch (error) {
     console.error(error);
@@ -69,14 +71,17 @@ async function pixabayApi(input, page) {
 async function onLoadMoreBtnClick() {
   page += 1;
   try {
-    const result = await pixabayApi(input.value, page);
+    const response = await pixabayApi(input.value);
     const totalPages = page * perPage;
-    console.log(result);
-    if (result.totalHits <= totalPages) {
+    console.log(response);
+    if (response.totalHits <= totalPages) {
       hideBtn();
       return Notiflix.Notify.failure(
         "We're sorry, but you've reached the end of search results."
       );
+    } else {
+      createMarkup(response);
+      showBtn();
     }
   } catch (e) {
     console.log(e);
