@@ -22,7 +22,7 @@ async function onSearch(evt) {
     try {
       page = 1;
       clear();
-      const response = await pixabayApi(input.value, page);
+      const response = await pixabayApi(input.value);
       console.log(response);
       if (response.hits < 1) {
         hideBtn();
@@ -46,7 +46,7 @@ async function onSearch(evt) {
 }
 
 async function pixabayApi(input) {
-  const BASE_URL = 'https://pixabay.com/api';
+  const BASE_URL = 'https://pixabay.com/api/';
 
   const options = {
     params: {
